@@ -1,5 +1,8 @@
+
 body {
     background-color: #e3dec8;
+    height: 100vh;
+    margin: 0;
 }
 
 .game-grid {
@@ -14,6 +17,7 @@ body {
 
 h1, h2 {
     text-align: center;
+    padding: 10px;
 }
 
 .container {
@@ -26,7 +30,7 @@ h1, h2 {
     align-items: center;
 }
 
-.resetbutton {
+#resetbutton {
     background-color: #ef7546;
     font-size: 20px;
 }
@@ -34,6 +38,10 @@ h1, h2 {
 .buttons {
     display: flex;
     justify-content: center;
+}
+
+div {
+    font-size: 50px;;
 }
 
 
