@@ -9,9 +9,9 @@ const symbols = {
 /*----- state variables -----*/
 
 const state = {
-    winner: "", // outcomes: null/emply (no winner), 1 (player 1), -1 (player 2) or "T" (tie) 
     player: "", // this will be either 1 (sun) or -1 (rain)
     board: "", // this will be a position on board, board is an array of arrays with 9 options
+    //winner: "", // outcomes: null/emply (no winner), 1 (player 1), -1 (player 2) or "T" (tie)
 };
 
 
@@ -21,13 +21,15 @@ const elements = {
     message: document.querySelector(".messageboard"),
     resetGame: document.getElementById("resetbutton"),
     gameGrid: document.querySelector(".game-grid"),
-    cellContents: [...document.querySelectorAll(".game-grid > div")], // creates an array
+    cellContents: [...document.querySelectorAll(".game-cell")], // makes it into an array
 }
 
 
 /*----- event listeners -----*/
 elements.gameGrid.addEventListener("click", playGame);
-elements.resetGame.addEventListener("click", init);
+elements.resetGame.addEventListener("click", function() {
+    init();
+});
 
 
 
@@ -36,7 +38,7 @@ elements.resetGame.addEventListener("click", init);
 function init () {
     state.board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     state.player = 1;
-    state.winner = null;
+    //state.winner = null;
     render();
 };
 
@@ -49,7 +51,11 @@ function renderBoard () {
     state.board.forEach(function (cell, cellIndex) {
         const cellId = `${cellIndex}`;
         const cellDiv = document.getElementById(cellId);
-        cellDiv.innerHTML = symbols[cell];
+        if (cell) {
+            cellDiv.innerHTML = cell;
+        } else {
+            cellDiv.innerHTML = "";
+        }
     });    
 };
 
@@ -66,24 +72,26 @@ function renderMessage() {
 function playGame (event) {
     const cellPosition = elements.cellContents.indexOf(event.target);
     if (cellPosition === -1 || state.winner) return;
+    if (state.board[cellPosition]) return; // exit the function early if the square is already occupied
     const cellReference = state.board[cellPosition];
-    cellReference[cellPosition] = state.player
+    state.board[cellPosition] = symbols[state.player];
+    cellReference[cellPosition] = state.player;
     state.player *= -1;
-    winner = getWinner();
+    //state.winner = getWinner();
     render();
 };
 
-function getWinner() {
-    if (Math.abs(state.board[0] + state.board[1] + state.board[2]) === 3) return state.player;
-    if (Math.abs(state.board[3] + state.board[4] + state.board[5]) === 3) return state.player;
-    if (Math.abs(state.board[6] + state.board[7] + state.board[8]) === 3) return state.player;
-    if (Math.abs(state.board[0] + state.board[3] + state.board[6]) === 3) return state.player;
-    if (Math.abs(state.board[1] + state.board[4] + state.board[7]) === 3) return state.player;
-    if (Math.abs(state.board[2] + state.board[5] + state.board[8]) === 3) return state.player;
-    if (Math.abs(state.board[0] + state.board[4] + state.board[8]) === 3) return state.player;
-    if (Math.abs(state.board[2] + state.board[4] + state.board[6]) === 3) return state.player;
-    if (state.board. includes(null)) return null;
-    return "T";
-};
+// function getWinner() {
+//     if (Math.abs(state.board[0] + state.board[1] + state.board[2]) === 3) return state.player;
+//     if (Math.abs(state.board[3] + state.board[4] + state.board[5]) === 3) return state.player;
+//     if (Math.abs(state.board[6] + state.board[7] + state.board[8]) === 3) return state.player;
+//     if (Math.abs(state.board[0] + state.board[3] + state.board[6]) === 3) return state.player;
+//     if (Math.abs(state.board[1] + state.board[4] + state.board[7]) === 3) return state.player;
+//     if (Math.abs(state.board[2] + state.board[5] + state.board[8]) === 3) return state.player;
+//     if (Math.abs(state.board[0] + state.board[4] + state.board[8]) === 3) return state.player;
+//     if (Math.abs(state.board[2] + state.board[4] + state.board[6]) === 3) return state.player;
+//     if (state.board. includes(null)) return null;
+//     return "T";
+// };
 
 init();
